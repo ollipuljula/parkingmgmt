@@ -1,6 +1,5 @@
 package fi.olli.puljula.parkingmgmt.service.impl;
 
-import fi.olli.puljula.parkingmgmt.api.model.LotResponse;
 import fi.olli.puljula.parkingmgmt.api.model.ExitResponse;
 import fi.olli.puljula.parkingmgmt.exception.CarNotFoundException;
 import fi.olli.puljula.parkingmgmt.exception.CarParkedAlreadyException;
@@ -8,6 +7,7 @@ import fi.olli.puljula.parkingmgmt.exception.InvalidParkingSpaceException;
 import fi.olli.puljula.parkingmgmt.exception.ParkingLotFullException;
 import fi.olli.puljula.parkingmgmt.exception.ParkingSpaceNotAvailableException;
 import fi.olli.puljula.parkingmgmt.repository.InMemoryParkingRepository;
+import fi.olli.puljula.parkingmgmt.repository.model.LotStatus;
 import fi.olli.puljula.parkingmgmt.repository.model.ParkingEvent;
 import fi.olli.puljula.parkingmgmt.service.ParkingService;
 import fi.olli.puljula.parkingmgmt.service.PricingService;
@@ -50,7 +50,7 @@ public class ParkingServiceImpl implements ParkingService {
         }
 
         ParkingEvent event = new ParkingEvent(
-                normalize(registrationNumber),
+                registrationNumber,
                 spaceNumber,
                 LocalDateTime.now()
         );
@@ -89,12 +89,10 @@ public class ParkingServiceImpl implements ParkingService {
     }
 
     @Override
-    public LotResponse getStatus() {
-        return new LotResponse(
+    public LotStatus getStatus() {
+        return new LotStatus(
                 CAPACITY,
-                CAPACITY - repository.count(),
-                repository.count(),
-                repository.count() >= CAPACITY
+                repository.count()
         );
     }
 
@@ -114,9 +112,5 @@ public class ParkingServiceImpl implements ParkingService {
             throw new InvalidParkingSpaceException("Parking space %d does not exist"
                     .formatted(spaceNumber));
         }
-    }
-
-    private String normalize(String registrationNumber) {
-        return registrationNumber.trim().toUpperCase();
     }
 }

@@ -54,7 +54,7 @@ public class InMemoryParkingRepository {
         return eventsByRegistrationNumber.size();
     }
 
-    private String normalize(String licensePlate) {
-        return licensePlate.trim().toUpperCase();
+    private String normalize(String s) {
+        return s.trim().toUpperCase();
     }
 }

@@ -1,7 +1,7 @@
 package fi.olli.puljula.parkingmgmt.service;
 
-import fi.olli.puljula.parkingmgmt.api.model.LotResponse;
 import fi.olli.puljula.parkingmgmt.api.model.ExitResponse;
+import fi.olli.puljula.parkingmgmt.repository.model.LotStatus;
 import fi.olli.puljula.parkingmgmt.repository.model.ParkingEvent;
 
 import java.util.List;
@@ -12,7 +12,7 @@ public interface ParkingService {
 
      ExitResponse exitCar(String registrationNumber);
 
-     LotResponse getStatus();
+     LotStatus getStatus();
 
      List<ParkingEvent> getActiveParkingEvents();
 

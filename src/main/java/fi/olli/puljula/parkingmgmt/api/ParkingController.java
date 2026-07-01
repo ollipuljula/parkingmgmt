@@ -22,20 +22,20 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/parking")
-public class ParkingCtrl {
+public class ParkingController {
 
-    private static final Logger log = LoggerFactory.getLogger(ParkingCtrl.class);
+    private static final Logger log = LoggerFactory.getLogger(ParkingController.class);
 
     private ParkingService parkingService;
 
     @Autowired
-    public ParkingCtrl(ParkingService parkingService) {
+    public ParkingController(ParkingService parkingService) {
         this.parkingService = parkingService;
     }
 
     @GetMapping("/lot")
     public LotResponse fetchLotStatus() {
-        return parkingService.getStatus();
+        return LotResponse.from(parkingService.getStatus());
     }
 
     @GetMapping("/space/{spaceNumber}")

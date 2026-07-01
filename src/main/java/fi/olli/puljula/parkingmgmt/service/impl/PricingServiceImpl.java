@@ -9,6 +9,14 @@ import java.time.LocalDateTime;
 @Service
 public class PricingServiceImpl implements PricingService {
 
+    /***
+     * Ensimmäinen 3h, 50snt/alkava 10min.
+     * Seuraavat tunnit 30snt/alkaen 10min.
+     *
+     * @param entryTime
+     * @param exitTime
+     * @return
+     */
     public int calculatePriceInCents(LocalDateTime entryTime, LocalDateTime exitTime) {
         long seconds = Duration.between(entryTime, exitTime).toSeconds();
 

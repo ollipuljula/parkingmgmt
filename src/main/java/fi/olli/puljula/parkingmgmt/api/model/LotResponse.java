@@ -1,5 +1,7 @@
 package fi.olli.puljula.parkingmgmt.api.model;
 
+import fi.olli.puljula.parkingmgmt.repository.model.LotStatus;
+
 public class LotResponse {
     private int spaceCount;
 
@@ -49,5 +51,11 @@ public class LotResponse {
 
     public void setFull(boolean full) {
         this.full = full;
+    }
+
+    public static LotResponse from(LotStatus lotStatus) {
+        return new LotResponse(lotStatus.getSpaceCount(),
+                lotStatus.getSpaceCount() - lotStatus.getOccupiedSpaceCount(),
+                lotStatus.getOccupiedSpaceCount(), lotStatus.getOccupiedSpaceCount() >= lotStatus.getSpaceCount());
     }
 }
