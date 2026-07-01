@@ -1,6 +1,5 @@
 package fi.olli.puljula.parkingmgmt.config;
 
-import fi.olli.puljula.parkingmgmt.api.model.ParkRequest;
 import fi.olli.puljula.parkingmgmt.service.ParkingService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
@@ -18,7 +17,6 @@ public class SeedTestData implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        System.out.println("foobar");
         parkingService.parkCar("ABC-123", 1);
         parkingService.parkCar("XYZ-456", 2);
         parkingService.parkCar("GFO-789", 4);

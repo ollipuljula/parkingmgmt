@@ -1,15 +1,15 @@
 package fi.olli.puljula.parkingmgmt.api.model;
 
-public class ParkRequest {
+public class EnterRequest {
 
     private String registrationNumber;
 
     private int parkingSpaceNumber;
 
-    public ParkRequest() {
+    public EnterRequest() {
     }
 
-    public ParkRequest(String registrationNumber, int parkingSpaceNumber) {
+    public EnterRequest(String registrationNumber, int parkingSpaceNumber) {
         this.registrationNumber = registrationNumber;
         this.parkingSpaceNumber = parkingSpaceNumber;
     }

@@ -1,14 +1,14 @@
 package fi.olli.puljula.parkingmgmt.service.impl;
 
 import fi.olli.puljula.parkingmgmt.api.model.LotResponse;
-import fi.olli.puljula.parkingmgmt.api.model.UnparkResponse;
+import fi.olli.puljula.parkingmgmt.api.model.ExitResponse;
 import fi.olli.puljula.parkingmgmt.exception.CarNotFoundException;
 import fi.olli.puljula.parkingmgmt.exception.CarParkedAlreadyException;
 import fi.olli.puljula.parkingmgmt.exception.InvalidParkingSpaceException;
 import fi.olli.puljula.parkingmgmt.exception.ParkingLotFullException;
-import fi.olli.puljula.parkingmgmt.exception.ParkingSpaceNotAvailable;
-import fi.olli.puljula.parkingmgmt.jpa.ParkingStore;
-import fi.olli.puljula.parkingmgmt.jpa.entity.ParkingEvent;
+import fi.olli.puljula.parkingmgmt.exception.ParkingSpaceNotAvailableException;
+import fi.olli.puljula.parkingmgmt.repository.InMemoryParkingRepository;
+import fi.olli.puljula.parkingmgmt.repository.model.ParkingEvent;
 import fi.olli.puljula.parkingmgmt.service.ParkingService;
 import fi.olli.puljula.parkingmgmt.service.PricingService;
 import org.springframework.stereotype.Service;
@@ -21,11 +21,11 @@ import java.util.List;
 public class ParkingServiceImpl implements ParkingService {
     private static final int CAPACITY = 5;
 
-    private final ParkingStore repository;
+    private final InMemoryParkingRepository repository;
     private final PricingService pricingService;
 
     public ParkingServiceImpl(
-            ParkingStore repository,
+            InMemoryParkingRepository repository,
             PricingService pricingService
     ) {
         this.repository = repository;
@@ -37,15 +37,16 @@ public class ParkingServiceImpl implements ParkingService {
         validateSpaceNumber(spaceNumber);
 
         if (repository.count() >= CAPACITY) {
-            throw new ParkingLotFullException();
+            throw new ParkingLotFullException("Parking lot is full");
         }
 
         if (repository.findByRegistrationNumber(registrationNumber).isPresent()) {
-            throw new CarParkedAlreadyException(registrationNumber);
+            throw new CarParkedAlreadyException("Car '%s' is already parked"
+                    .formatted(registrationNumber));
         }
 
-        if (repository.isSpaceAvailable(spaceNumber)) {
-            throw new ParkingSpaceNotAvailable(spaceNumber + "");
+        if (repository.isSpaceOccupied(spaceNumber)) {
+            throw new ParkingSpaceNotAvailableException("Parking space %d is already occupied".formatted(spaceNumber));
         }
 
         ParkingEvent event = new ParkingEvent(
@@ -58,9 +59,10 @@ public class ParkingServiceImpl implements ParkingService {
     }
 
     @Override
-    public synchronized UnparkResponse exitCar(String registrationNumber) {
+    public synchronized ExitResponse exitCar(String registrationNumber) {
         ParkingEvent event = repository.findByRegistrationNumber(registrationNumber)
-                .orElseThrow(() -> new CarNotFoundException(registrationNumber));
+                .orElseThrow(() -> new CarNotFoundException("No active parking event found for car '%s'"
+                        .formatted(registrationNumber)));
 
         LocalDateTime exitTime = LocalDateTime.now();
 
@@ -76,7 +78,7 @@ public class ParkingServiceImpl implements ParkingService {
 
         repository.deleteByRegistrationNumber(event.getRegistrationNumber());
 
-        return new UnparkResponse(
+        return new ExitResponse(
                 event.getStartTime(),
                 exitTime,
                 durationSeconds,
@@ -102,14 +104,15 @@ public class ParkingServiceImpl implements ParkingService {
     }
 
     @Override
-    public boolean isSpaceAvailable(int spaceNumber) {
+    public boolean isSpaceOccupied(int spaceNumber) {
         validateSpaceNumber(spaceNumber);
-        return !repository.isSpaceAvailable(spaceNumber);
+        return repository.isSpaceOccupied(spaceNumber);
     }
 
     private void validateSpaceNumber(int spaceNumber) {
         if (spaceNumber < 1 || spaceNumber > CAPACITY) {
-            throw new InvalidParkingSpaceException(spaceNumber + "");
+            throw new InvalidParkingSpaceException("Parking space %d does not exist"
+                    .formatted(spaceNumber));
         }
     }
 

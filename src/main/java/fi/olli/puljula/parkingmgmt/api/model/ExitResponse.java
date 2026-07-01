@@ -2,7 +2,7 @@ package fi.olli.puljula.parkingmgmt.api.model;
 
 import java.time.LocalDateTime;
 
-public class UnparkResponse {
+public class ExitResponse {
     private LocalDateTime startTime;
     private LocalDateTime exitTime;
     private long duration;
@@ -11,10 +11,10 @@ public class UnparkResponse {
 
     private int parkingSpaceNumber;
 
-    public UnparkResponse() {
+    public ExitResponse() {
     }
 
-    public UnparkResponse(LocalDateTime startTime, LocalDateTime exitTime, long duration, long price, String registrationNumber, int parkingSpaceNumber) {
+    public ExitResponse(LocalDateTime startTime, LocalDateTime exitTime, long duration, long price, String registrationNumber, int parkingSpaceNumber) {
         this.startTime = startTime;
         this.exitTime = exitTime;
         this.duration = duration;

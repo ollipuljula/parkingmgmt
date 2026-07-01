@@ -1,6 +1,6 @@
-package fi.olli.puljula.parkingmgmt.jpa;
+package fi.olli.puljula.parkingmgmt.repository;
 
-import fi.olli.puljula.parkingmgmt.jpa.entity.ParkingEvent;
+import fi.olli.puljula.parkingmgmt.repository.model.ParkingEvent;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
-public class ParkingStore {
+public class InMemoryParkingRepository {
     private final Map<String, ParkingEvent> eventsByRegistrationNumber = new ConcurrentHashMap<>();
     private final Map<Integer, String> registrationNumberBySpaceNumber = new ConcurrentHashMap<>();
 
@@ -21,7 +21,7 @@ public class ParkingStore {
         return Optional.ofNullable(eventsByRegistrationNumber.get(normalize(registrationNumber)));
     }
 
-    public boolean isSpaceAvailable(int spaceNumber) {
+    public boolean isSpaceOccupied(int spaceNumber) {
         return registrationNumberBySpaceNumber.containsKey(spaceNumber);
     }
 

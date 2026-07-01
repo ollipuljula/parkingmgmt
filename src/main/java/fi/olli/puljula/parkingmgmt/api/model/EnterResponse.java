@@ -1,19 +1,19 @@
 package fi.olli.puljula.parkingmgmt.api.model;
 
-import fi.olli.puljula.parkingmgmt.jpa.entity.ParkingEvent;
+import fi.olli.puljula.parkingmgmt.repository.model.ParkingEvent;
 
 import java.time.LocalDateTime;
 
-public class ParkResponse {
+public class EnterResponse {
     private LocalDateTime startTime;
     private String registrationNumber;
 
     private int parkingSpaceNumber;
 
-    public ParkResponse() {
+    public EnterResponse() {
     }
 
-    public ParkResponse(LocalDateTime startTime, String registrationNumber, int parkingSpaceNumber) {
+    public EnterResponse(LocalDateTime startTime, String registrationNumber, int parkingSpaceNumber) {
         this.startTime = startTime;
         this.registrationNumber = registrationNumber;
         this.parkingSpaceNumber = parkingSpaceNumber;
@@ -43,7 +43,7 @@ public class ParkResponse {
         this.parkingSpaceNumber = parkingSpaceNumber;
     }
 
-    public static ParkResponse from(ParkingEvent event) {
-        return new ParkResponse(event.getStartTime(), event.getRegistrationNumber(), event.getSpaceNumber());
+    public static EnterResponse from(ParkingEvent event) {
+        return new EnterResponse(event.getStartTime(), event.getRegistrationNumber(), event.getSpaceNumber());
     }
 }

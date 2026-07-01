@@ -1,14 +1,11 @@
-package fi.olli.puljula.parkingmgmt.jpa.entity;
+package fi.olli.puljula.parkingmgmt.repository.model;
 
 import java.time.LocalDateTime;
 
 public class ParkingEvent {
-    private String registrationNumber;
-    private int spaceNumber;
-    private LocalDateTime startTime;
-
-    public ParkingEvent() {
-    }
+    private final String registrationNumber;
+    private final int spaceNumber;
+    private final LocalDateTime startTime;
 
     public ParkingEvent(String registrationNumber, int spaceNumber, LocalDateTime startTime) {
         this.registrationNumber = registrationNumber;
@@ -20,23 +17,11 @@ public class ParkingEvent {
         return registrationNumber;
     }
 
-    public void setRegistrationNumber(String registrationNumber) {
-        this.registrationNumber = registrationNumber;
-    }
-
     public int getSpaceNumber() {
         return spaceNumber;
     }
 
-    public void setSpaceNumber(int spaceNumber) {
-        this.spaceNumber = spaceNumber;
-    }
-
     public LocalDateTime getStartTime() {
         return startTime;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
     }
 }

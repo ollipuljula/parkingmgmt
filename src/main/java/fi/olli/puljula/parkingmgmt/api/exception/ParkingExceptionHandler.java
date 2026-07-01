@@ -4,7 +4,7 @@ import fi.olli.puljula.parkingmgmt.exception.CarNotFoundException;
 import fi.olli.puljula.parkingmgmt.exception.CarParkedAlreadyException;
 import fi.olli.puljula.parkingmgmt.exception.InvalidParkingSpaceException;
 import fi.olli.puljula.parkingmgmt.exception.ParkingLotFullException;
-import fi.olli.puljula.parkingmgmt.exception.ParkingSpaceNotAvailable;
+import fi.olli.puljula.parkingmgmt.exception.ParkingSpaceNotAvailableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,40 +19,40 @@ public class ParkingExceptionHandler {
 
     @ExceptionHandler(ParkingLotFullException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ApiError handleParkingLotFull(ParkingLotFullException ex) {
-        return new ApiError(ex.getMessage());
+    public ApiError handleParkingLotFull(ParkingLotFullException e){
+        return new ApiError(e.getMessage());
     }
 
-    @ExceptionHandler(ParkingSpaceNotAvailable.class)
+    @ExceptionHandler(ParkingSpaceNotAvailableException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ApiError handleParkingSpaceNotAvailable(ParkingSpaceNotAvailable ex) {
-        return new ApiError(ex.getMessage());
+    public ApiError handleParkingSpaceNotAvailable(ParkingSpaceNotAvailableException e){
+        return new ApiError(e.getMessage());
     }
 
     @ExceptionHandler(CarNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ApiError handleCarNotFound(CarNotFoundException ex) {
-        return new ApiError(ex.getMessage());
+    public ApiError handleCarNotFound(CarNotFoundException e){
+        return new ApiError(e.getMessage());
     }
 
     @ExceptionHandler(CarParkedAlreadyException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ApiError handlearParkedAlready(CarParkedAlreadyException ex) {
-        return new ApiError(ex.getMessage());
+    public ApiError handlearParkedAlready(CarParkedAlreadyException e){
+        return new ApiError(e.getMessage());
     }
 
     @ExceptionHandler(InvalidParkingSpaceException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiError handleInvalidParkingSpace(InvalidParkingSpaceException ex) {
-        return new ApiError(ex.getMessage());
+    public ApiError handleInvalidParkingSpace(InvalidParkingSpaceException e){
+        return new ApiError(e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiError handleUnexpected(Exception ex) {
+    public ApiError handleUnexpected(Exception e){
 
-        log.error("Unexpected exception", ex);
+        log.error("Unexpected exception", e);
 
-        return new ApiError(ex.getMessage());
+        return new ApiError("Internal server error");
     }
 }
